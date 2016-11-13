@@ -12,12 +12,16 @@ public class LoginButton : MonoBehaviour
     public Text ErrorText = null;
     public GameObject LoadingIndicator = null;
 
-    public GameObject MenuPanel = null;
-    private Animator MenuAnimator;
+    public GameObject LoginPanel = null;
+    private Animator LoginPanelAnimator;
+
+    public GameObject MainMenuPanel = null;
+    private Animator MainMenuPanelAnimator;
 
     public void Start()
     {
-        MenuAnimator = MenuPanel.GetComponent<Animator>();
+        LoginPanelAnimator = LoginPanel.GetComponent<Animator>();
+        MainMenuPanelAnimator = MainMenuPanel.GetComponent<Animator>();
     }
 
     public void OnClick()
@@ -39,7 +43,8 @@ public class LoginButton : MonoBehaviour
             if (userId != -1)
             {
                 ErrorText.text = "Login Successful for: " + www.text;
-                MenuAnimator.SetBool(AnimationHashes.MENU_SwingViewToFront, true);
+                LoginPanelAnimator.SetBool(AnimationHashes.MENU_SwingViewToFront, true);
+                MainMenuPanelAnimator.SetBool(AnimationHashes.MENU_SwingFrontToView, true);
             }
             else
             {
@@ -50,5 +55,11 @@ public class LoginButton : MonoBehaviour
             ErrorText.text = "Username and/or Password was entered incorrect.";
         }
         LoadingIndicator.SetActive(false);
+    }
+
+    public void Logout()
+    {
+        LoginPanelAnimator.SetBool(AnimationHashes.MENU_SwingFrontToView, true);
+        MainMenuPanelAnimator.SetBool(AnimationHashes.MENU_SwingViewToFront, true);
     }
 }
