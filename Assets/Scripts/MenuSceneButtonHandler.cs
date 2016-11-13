@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System;
 
-public class LoginButton : MonoBehaviour
+public class MenuSceneButtonHandler : MonoBehaviour
 {
     private string BaseApiAddress = "http://192.168.1.169:8080/api/Login?";
 
@@ -24,7 +24,7 @@ public class LoginButton : MonoBehaviour
         MainMenuPanelAnimator = MainMenuPanel.GetComponent<Animator>();
     }
 
-    public void OnClick()
+    public void OnLoginClicked()
     {
         string ApiAddress = string.Format("{0}username={1}&password={2}", BaseApiAddress, Username.text, Password.text);
         WWW www = new WWW(ApiAddress);
@@ -33,7 +33,7 @@ public class LoginButton : MonoBehaviour
         StartCoroutine(AttemptLogin(www));
     }
 
-    public IEnumerator AttemptLogin(WWW www)
+    private IEnumerator AttemptLogin(WWW www)
     {
         yield return www;
 
@@ -57,7 +57,7 @@ public class LoginButton : MonoBehaviour
         LoadingIndicator.SetActive(false);
     }
 
-    public void Logout()
+    public void OnLogoutClicked()
     {
         LoginPanelAnimator.SetBool(AnimationHashes.MENU_SwingFrontToView, true);
         MainMenuPanelAnimator.SetBool(AnimationHashes.MENU_SwingViewToFront, true);
