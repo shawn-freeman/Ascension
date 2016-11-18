@@ -39,15 +39,13 @@ public class MenuSceneButtonHandler : MonoBehaviour
 
     public void OnLoginClicked()
     {
-        
-        //WWW www = new WWW(ApiAddress);
-
-        LoadingIndicator.SetActive(true);
         StartCoroutine(AttemptLogin());
     }
 
     private IEnumerator AttemptLogin()
     {
+        LoadingIndicator.SetActive(true);
+
         string ApiAddress = string.Format("{0}Login?username={1}&password={2}", BaseApiAddress, Username.text, Password.text);
         UnityWebRequest request = UnityWebRequest.Get(ApiAddress);
 
@@ -82,6 +80,9 @@ public class MenuSceneButtonHandler : MonoBehaviour
         switch (from)
         {
             case MAIN_MENU:
+                Username.text = string.Empty;
+                Password.text = string.Empty;
+                ErrorText.text = string.Empty;
                 LoginPanelAnimator.SetBool(AnimationHashes.MENU_SwingFrontToView, true);
                 MainMenuPanelAnimator.SetBool(AnimationHashes.MENU_SwingViewToFront, true);
                 break;
@@ -108,6 +109,8 @@ public class MenuSceneButtonHandler : MonoBehaviour
         switch (from)
         {
             case MAIN_MENU:
+                ChangePassword.text = string.Empty;
+                ConfirmPassword.text = string.Empty;
                 MainMenuPanelAnimator.SetBool(AnimationHashes.MENU_SwingViewToFront, true);
                 ChangePasswordPanelAnimator.SetBool(AnimationHashes.MENU_SwingFrontToView, true);
                 break;
@@ -121,21 +124,22 @@ public class MenuSceneButtonHandler : MonoBehaviour
 
     public void OnAttemptChangePasswordClicked()
     {
+        //client side validation
         ErrorText.text = "";
         if (ChangePassword.text != ConfirmPassword.text)
         {
             ErrorText.text = "Passwords does not match!";
+            return;
         }
-
-       
-
-        LoadingIndicator.SetActive(true);
+        
         StartCoroutine(AttemptPasswordChange());
     }
 
     private IEnumerator AttemptPasswordChange()
     {
-        string ApiAddress = string.Format("{0}Login", BaseApiAddress);
+        LoadingIndicator.SetActive(true);
+        string ApiAddress = string.Format("{0}Login?userID={1}&currentPassword={2}&newPassword={3}", BaseApiAddress, 1, "foobar", ChangePassword.text);
+
         WWWForm form = new WWWForm();
         form.AddField("userId", 1.ToString());
         form.AddField("currentPassword", "foobar");
@@ -160,5 +164,7 @@ public class MenuSceneButtonHandler : MonoBehaviour
         {
             ErrorText.text = "Failed to change the password.";
         }
+
+        LoadingIndicator.SetActive(false);
     }
 }
