@@ -56,7 +56,6 @@ public class MenuSceneButtonHandler : MonoBehaviour
         {
             if (userId != -1)
             {
-                ErrorText.text = "Login Successful for: " + request.downloadHandler.text;
                 TransToMainMenu(LOGIN);
             }
             else
