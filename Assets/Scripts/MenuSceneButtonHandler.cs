@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System;
 using UnityEngine.Networking;
+using CONDUIT.UnityCL;
 
 public class MenuSceneButtonHandler : MonoBehaviour
 {
@@ -136,13 +137,19 @@ public class MenuSceneButtonHandler : MonoBehaviour
 
     private IEnumerator AttemptPasswordChange()
     {
+        var changeRequest = new ChangePasswordRequest();
+        changeRequest.UserId = 1;
+        changeRequest.CurrentPassword = "foobar";
+        changeRequest.NewPassword = ChangePassword.text;
+
+        var jsonObj = JsonUtility.ToJson(changeRequest);
+
+
         LoadingIndicator.SetActive(true);
-        string ApiAddress = string.Format("{0}Login?userID={1}&currentPassword={2}&newPassword={3}", BaseApiAddress, 1, "foobar", ChangePassword.text);
+        string ApiAddress = string.Format("{0}Login?obj={1}", BaseApiAddress, jsonObj);
 
         WWWForm form = new WWWForm();
-        form.AddField("userId", 1.ToString());
-        form.AddField("currentPassword", "foobar");
-        form.AddField("newPassword", ChangePassword.text);
+        form.AddField("obj", jsonObj);
         
         UnityWebRequest request = UnityWebRequest.Post(ApiAddress, form);
 
@@ -166,4 +173,10 @@ public class MenuSceneButtonHandler : MonoBehaviour
 
         LoadingIndicator.SetActive(false);
     }
+}
+
+public class Foo
+{
+    public int userId;
+    public string password;
 }
