@@ -4,6 +4,7 @@ using System.Collections;
 using System;
 using UnityEngine.Networking;
 using CONDUIT.UnityCL;
+using System.Linq;
 
 public class MenuSceneButtonHandler : MonoBehaviour
 {
@@ -31,9 +32,12 @@ public class MenuSceneButtonHandler : MonoBehaviour
     public GameObject ChangePasswordPanel = null;
     private Animator ChangePasswordPanelAnimator;
 
+    public HttpHandler httpHandler;
+
     public void Start()
     {
-        if(LoginPanel != null) LoginPanelAnimator = LoginPanel.GetComponent<Animator>();
+        httpHandler = GetComponent<HttpHandler>(); ;
+        if (LoginPanel != null) LoginPanelAnimator = LoginPanel.GetComponent<Animator>();
         if(MainMenuPanel != null) MainMenuPanelAnimator = MainMenuPanel.GetComponent<Animator>();
         if(ChangePasswordPanel != null) ChangePasswordPanelAnimator = ChangePasswordPanel.GetComponent<Animator>();
     }
@@ -131,52 +135,29 @@ public class MenuSceneButtonHandler : MonoBehaviour
             ErrorText.text = "Passwords does not match!";
             return;
         }
-        
-        StartCoroutine(AttemptPasswordChange());
-    }
 
-    private IEnumerator AttemptPasswordChange()
-    {
+        LoadingIndicator.SetActive(true);
+
         var changeRequest = new ChangePasswordRequest();
         changeRequest.UserId = 1;
         changeRequest.CurrentPassword = "foobar";
         changeRequest.NewPassword = ChangePassword.text;
 
-        var jsonObj = JsonUtility.ToJson(changeRequest);
-
-
-        LoadingIndicator.SetActive(true);
-        string ApiAddress = string.Format("{0}Login?obj={1}", BaseApiAddress, jsonObj);
-
-        WWWForm form = new WWWForm();
-        form.AddField("obj", jsonObj);
-        
-        UnityWebRequest request = UnityWebRequest.Post(ApiAddress, form);
-
-        yield return request.Send();
-
-        bool success;
-        if (request.error == null && bool.TryParse(request.downloadHandler.text, out success))
-        {
-            if (success)
-            {
-                TransToMainMenu(CHANGE_PASSWORD);
-            }else
-            {
-                ErrorText.text = "Failed to change the password.";
-            }
-        }
-        else
-        {
-            ErrorText.text = "Failed to change the password.";
-        }
-
-        LoadingIndicator.SetActive(false);
+        httpHandler.POST<bool>("Login", changeRequest, OnChangePasswordResponse);
     }
-}
 
-public class Foo
-{
-    public int userId;
-    public string password;
+    public void OnChangePasswordResponse(bool success)
+    {
+        LoadingIndicator.SetActive(false);
+
+        if (success)
+        {
+            TransToMainMenu(CHANGE_PASSWORD);
+        }else
+        {
+            ErrorText.text = "Failed to change password.";
+        }
+    }
+
+
 }
