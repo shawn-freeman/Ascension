@@ -3,16 +3,16 @@ using UnityEngine.UI;
 using System.Collections;
 using System;
 using UnityEngine.Networking;
-using CONDUIT.UnityCL;
-using System.Linq;
+
+using CONDUIT.UnityCL.Enums;
+using CONDUIT.UnityCL.Transports.Account;
+using CONDUIT.UnityCL.Transports.ErrorHandling;
 
 public class MenuSceneButtonHandler : MonoBehaviour
 {
     private const string LOGIN = "Login";
     private const string MAIN_MENU = "MainMenu";
     private const string CHANGE_PASSWORD = "ChangePassword";
-
-    private string BaseApiAddress = "http://192.168.1.169:8080/api/";
 
     public InputField Username = null;
     public InputField Password = null;
@@ -44,35 +44,50 @@ public class MenuSceneButtonHandler : MonoBehaviour
 
     public void OnLoginClicked()
     {
-        StartCoroutine(AttemptLogin());
-    }
-
-    private IEnumerator AttemptLogin()
-    {
         LoadingIndicator.SetActive(true);
 
-        string ApiAddress = string.Format("{0}Login?username={1}&password={2}", BaseApiAddress, Username.text, Password.text);
-        UnityWebRequest request = UnityWebRequest.Get(ApiAddress);
-
-        yield return request.Send();
-
-        int userId;
-        if (request.error == null && Int32.TryParse(request.downloadHandler.text, out userId))
+        var loginRequest = new LoginRequest()
         {
-            if (userId != -1)
-            {
-                TransToMainMenu(LOGIN);
-            }
-            else
-            {
-                ErrorText.text = "Username and/or Password was entered incorrect.";
-            }
-        }else
-        {
-            ErrorText.text = "Username and/or Password was entered incorrect.";
-        }
+            Username = Username.text,
+            Password = Password.text
+        };
+
+        httpHandler.GET<LoginRequest, UserInfo>(ControllerTypes.Json, loginRequest, OnLoginResponse);
+
+        //StartCoroutine(AttemptLogin());
+    }
+
+    public void OnLoginResponse(UserInfo response)
+    {
         LoadingIndicator.SetActive(false);
     }
+
+    //private IEnumerator AttemptLogin()
+    //{
+    //    LoadingIndicator.SetActive(true);
+
+    //    string ApiAddress = string.Format("{0}Login?username={1}&password={2}", BaseApiAddress, Username.text, Password.text);
+    //    UnityWebRequest request = UnityWebRequest.Get(ApiAddress);
+
+    //    yield return request.Send();
+
+    //    int userId;
+    //    if (request.error == null && Int32.TryParse(request.downloadHandler.text, out userId))
+    //    {
+    //        if (userId != -1)
+    //        {
+    //            TransToMainMenu(LOGIN);
+    //        }
+    //        else
+    //        {
+    //            ErrorText.text = "Username and/or Password was entered incorrect.";
+    //        }
+    //    }else
+    //    {
+    //        ErrorText.text = "Username and/or Password was entered incorrect.";
+    //    }
+    //    LoadingIndicator.SetActive(false);
+    //}
 
     public void OnLogoutClicked()
     {
@@ -143,7 +158,7 @@ public class MenuSceneButtonHandler : MonoBehaviour
         changeRequest.CurrentPassword = "foobar";
         changeRequest.NewPassword = ChangePassword.text;
 
-        httpHandler.POST<bool>("Login", changeRequest, OnChangePasswordResponse);
+        httpHandler.POST<ChangePasswordRequest, bool>(ControllerTypes.Login, changeRequest, OnChangePasswordResponse);
     }
 
     public void OnChangePasswordResponse(bool success)
