@@ -9,6 +9,7 @@ using CONDUIT.UnityCL.Enums;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using CONDUIT.UnityCL.Helpers;
+using System.Text.RegularExpressions;
 
 public class HttpHandler : MonoBehaviour
 {
@@ -76,10 +77,8 @@ public class HttpHandler : MonoBehaviour
             }
             else
             {
-                var json = request.downloadHandler.text.Replace('\\', '"');
-                var t = request.downloadHandler.text.ToString();
-                //response = JsonUtility.FromJson<T>(json);
-                response = ObjectConverter.BytesToObject<T>(request.downloadHandler.data);
+                var json = ParseStr(request.downloadHandler.text);
+                response = JsonUtility.FromJson<T>(json);
             }
 
             callback(response);
@@ -88,5 +87,20 @@ public class HttpHandler : MonoBehaviour
         {
             Debug.Log(string.Format("WaitForRequest() ERROR: {0}", request.error));
         }
+    }
+
+    private string ParseStr(string shittyStr)
+    {
+        var json = string.Empty;
+        for (var i = 0; i < shittyStr.Length - 1; i++)
+        {
+            string str = shittyStr[i].ToString();
+            //skip the character we dont want
+            if (str == @"\" || i == 0) continue;
+
+            json += str;
+        }
+
+        return json;
     }
 }

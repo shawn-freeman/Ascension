@@ -52,49 +52,28 @@ public class MenuSceneButtonHandler : MonoBehaviour
             Password = Password.text
         };
 
-        httpHandler.GET<LoginRequest, UserInfo>(ControllerTypes.Json, loginRequest, OnLoginResponse);
-
-        //StartCoroutine(AttemptLogin());
+        httpHandler.GET<LoginRequest, ReturnResult<UserInfo>>(ControllerTypes.Login, loginRequest, OnLoginResponse);
     }
 
-    public void OnLoginResponse(UserInfo response)
+    public void OnLoginResponse(ReturnResult<UserInfo> response)
     {
         LoadingIndicator.SetActive(false);
+
+        if (response.HasError)
+        {
+            ErrorText.text = "Login Failed.";
+            return;
+        }
+
+        TransToMainMenu(LOGIN);
     }
-
-    //private IEnumerator AttemptLogin()
-    //{
-    //    LoadingIndicator.SetActive(true);
-
-    //    string ApiAddress = string.Format("{0}Login?username={1}&password={2}", BaseApiAddress, Username.text, Password.text);
-    //    UnityWebRequest request = UnityWebRequest.Get(ApiAddress);
-
-    //    yield return request.Send();
-
-    //    int userId;
-    //    if (request.error == null && Int32.TryParse(request.downloadHandler.text, out userId))
-    //    {
-    //        if (userId != -1)
-    //        {
-    //            TransToMainMenu(LOGIN);
-    //        }
-    //        else
-    //        {
-    //            ErrorText.text = "Username and/or Password was entered incorrect.";
-    //        }
-    //    }else
-    //    {
-    //        ErrorText.text = "Username and/or Password was entered incorrect.";
-    //    }
-    //    LoadingIndicator.SetActive(false);
-    //}
 
     public void OnLogoutClicked()
     {
         TransToLogin(MAIN_MENU);
     }
 
-    public void TransToLogin(string from)
+    private void TransToLogin(string from)
     {
         switch (from)
         {
@@ -108,7 +87,7 @@ public class MenuSceneButtonHandler : MonoBehaviour
         }
     }
 
-    public void TransToMainMenu(string from)
+    private void TransToMainMenu(string from)
     {
         switch (from)
         {
@@ -123,7 +102,7 @@ public class MenuSceneButtonHandler : MonoBehaviour
         }
     }
 
-    public void TransToChangePassword(string from)
+    private void TransToChangePassword(string from)
     {
         switch (from)
         {
