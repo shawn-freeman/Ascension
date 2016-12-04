@@ -13,13 +13,17 @@ using System.Text.RegularExpressions;
 
 public class HttpHandler : MonoBehaviour
 {
+    private const string LOCAL_ADDRESS = "http://localhost:57871/api/";
+    private const string PRODUCTION_ADDRESS = "http://192.168.1.169:8080/api/";
+
     public bool UseLocalAddress;
-    private string _baseUrl;
-    
-    public void Awake()
+
+    public string BaseUrl
     {
-        if (UseLocalAddress) _baseUrl = "http://localhost:57871/api/";
-        else _baseUrl = "http://192.168.1.169:8080/api/";
+        get {
+            if (UseLocalAddress) return LOCAL_ADDRESS;
+            else return PRODUCTION_ADDRESS; 
+        }
     }
 
     /// <summary>
@@ -34,7 +38,7 @@ public class HttpHandler : MonoBehaviour
     {
         var jsonObj = JsonUtility.ToJson(obj);
 
-        string ApiAddress = string.Format("{0}{1}?obj={2}", _baseUrl, controller, jsonObj);
+        string ApiAddress = string.Format("{0}{1}?obj={2}", BaseUrl, controller, jsonObj);
 
         UnityWebRequest request = UnityWebRequest.Get(ApiAddress);
 
@@ -53,7 +57,7 @@ public class HttpHandler : MonoBehaviour
     {
         var jsonObj = JsonUtility.ToJson(obj);
 
-        string ApiAddress = string.Format("{0}{1}?obj={2}", _baseUrl, controller, jsonObj);
+        string ApiAddress = string.Format("{0}{1}?obj={2}", BaseUrl, controller, jsonObj);
 
         WWWForm form = new WWWForm();
         form.AddField("obj", jsonObj);
