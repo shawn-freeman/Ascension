@@ -138,6 +138,7 @@ public class MenuSceneButtonHandler : MonoBehaviour
             return;
         }
 
+        GlobalData.CurrentUser = response.Value;
         TransToMainMenu(LOGIN);
     }
 
@@ -167,7 +168,7 @@ public class MenuSceneButtonHandler : MonoBehaviour
         LoadingIndicator.SetActive(true);
 
         var changeRequest = new ChangePasswordRequest();
-        changeRequest.UserId = 1;
+        changeRequest.UserId = GlobalData.CurrentUser.UserId;
         changeRequest.CurrentPassword = "foobar";
         changeRequest.NewPassword = ChangePassword.text;
 
@@ -180,6 +181,7 @@ public class MenuSceneButtonHandler : MonoBehaviour
 
         if (success)
         {
+            GlobalData.CurrentUser.Password = ChangePassword.text;
             TransToMainMenu(CHANGE_PASSWORD);
         }else
         {
