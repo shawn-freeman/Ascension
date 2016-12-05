@@ -25,6 +25,9 @@ public class MenuSceneButtonHandler : MonoBehaviour
 
     public GameObject LoadingIndicator = null;
 
+    public GameObject ProfileBannerPanel = null;
+    private Animator ProfilePanelAnimator;
+
     public GameObject LoginPanel = null;
     private Animator LoginPanelAnimator;
 
@@ -46,6 +49,7 @@ public class MenuSceneButtonHandler : MonoBehaviour
         if(MainMenuPanel != null) MainMenuPanelAnimator = MainMenuPanel.GetComponent<Animator>();
         if(ChangePasswordPanel != null) ChangePasswordPanelAnimator = ChangePasswordPanel.GetComponent<Animator>();
         if(CreateAccountPanel != null) CreateAccountPanelAnimator = CreateAccountPanel.GetComponent<Animator>();
+        if (ProfileBannerPanel != null) ProfilePanelAnimator = ProfileBannerPanel.GetComponent<Animator>();
     }
 
     #region MenuNavigation
@@ -140,10 +144,15 @@ public class MenuSceneButtonHandler : MonoBehaviour
 
         GlobalData.CurrentUser = response.Value;
         TransToMainMenu(LOGIN);
+
+        //set the profile banner username and animate it into view
+        ProfileBannerPanel.transform.GetComponentInChildren<Text>().text = response.Value.Username;
+        ProfilePanelAnimator.SetFloat(AnimationHashes.MENU_ProfileSlideDirection, -1.0f);
     }
 
     public void OnLogoutClicked()
     {
+        ProfilePanelAnimator.SetFloat(AnimationHashes.MENU_ProfileSlideDirection, 1.0f);
         TransToLogin(MAIN_MENU);
     }
 
