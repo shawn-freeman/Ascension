@@ -10,6 +10,9 @@ using CONDUIT.UnityCL.Transports.ErrorHandling;
 
 public class MenuSceneButtonHandler : MonoBehaviour
 {
+    private const float ACTIVATE_MENU = 1.0f;
+    private const float DEACTIVATE_MENU = -1.0f;
+
     private const string LOGIN = "Login";
     private const string MAIN_MENU = "MainMenu";
     private const string CHANGE_PASSWORD = "ChangePassword";
@@ -62,12 +65,12 @@ public class MenuSceneButtonHandler : MonoBehaviour
         switch (from)
         {
             case MAIN_MENU:
-                LoginPanelAnimator.SetBool(AnimationHashes.MENU_SwingFrontToView, true);
-                MainMenuPanelAnimator.SetBool(AnimationHashes.MENU_SwingViewToFront, true);
+                LoginPanelAnimator.SetFloat(AnimationHashes.MENU_SwingDirection, ACTIVATE_MENU);
+                MainMenuPanelAnimator.SetFloat(AnimationHashes.MENU_SwingDirection, DEACTIVATE_MENU);
                 break;
             case CREATE_ACCOUNT:
-                LoginPanelAnimator.SetBool(AnimationHashes.MENU_SwingFrontToView, true);
-                CreateAccountPanelAnimator.SetBool(AnimationHashes.MENU_SwingViewToFront, true);
+                LoginPanelAnimator.SetFloat(AnimationHashes.MENU_SwingDirection, ACTIVATE_MENU);
+                CreateAccountPanelAnimator.SetFloat(AnimationHashes.MENU_SwingDirection, DEACTIVATE_MENU);
                 break;
         }
     }
@@ -77,12 +80,12 @@ public class MenuSceneButtonHandler : MonoBehaviour
         switch (from)
         {
             case LOGIN:
-                LoginPanelAnimator.SetBool(AnimationHashes.MENU_SwingViewToFront, true);
-                MainMenuPanelAnimator.SetBool(AnimationHashes.MENU_SwingFrontToView, true);
+                LoginPanelAnimator.SetFloat(AnimationHashes.MENU_SwingDirection, DEACTIVATE_MENU);
+                MainMenuPanelAnimator.SetFloat(AnimationHashes.MENU_SwingDirection, ACTIVATE_MENU); ;
                 break;
             case CHANGE_PASSWORD:
-                MainMenuPanelAnimator.SetBool(AnimationHashes.MENU_SwingFrontToView, true);
-                ChangePasswordPanelAnimator.SetBool(AnimationHashes.MENU_SwingViewToFront, true);
+                MainMenuPanelAnimator.SetFloat(AnimationHashes.MENU_SwingDirection, ACTIVATE_MENU);
+                ChangePasswordPanelAnimator.SetFloat(AnimationHashes.MENU_SwingDirection, DEACTIVATE_MENU);
                 break;
         }
     }
@@ -94,8 +97,8 @@ public class MenuSceneButtonHandler : MonoBehaviour
             case MAIN_MENU:
                 ChangePassword.text = string.Empty;
                 ConfirmPassword.text = string.Empty;
-                MainMenuPanelAnimator.SetBool(AnimationHashes.MENU_SwingViewToFront, true);
-                ChangePasswordPanelAnimator.SetBool(AnimationHashes.MENU_SwingFrontToView, true);
+                MainMenuPanelAnimator.SetFloat(AnimationHashes.MENU_SwingDirection, DEACTIVATE_MENU);
+                ChangePasswordPanelAnimator.SetFloat(AnimationHashes.MENU_SwingDirection, ACTIVATE_MENU);
                 break;
         }
     }
@@ -109,8 +112,8 @@ public class MenuSceneButtonHandler : MonoBehaviour
         switch (from)
         {
             case LOGIN:
-                LoginPanelAnimator.SetBool(AnimationHashes.MENU_SwingViewToFront, true);
-                CreateAccountPanelAnimator.SetBool(AnimationHashes.MENU_SwingFrontToView, true);
+                LoginPanelAnimator.SetFloat(AnimationHashes.MENU_SwingDirection, DEACTIVATE_MENU);
+                CreateAccountPanelAnimator.SetFloat(AnimationHashes.MENU_SwingDirection, ACTIVATE_MENU);
                 break;
         }
     }
