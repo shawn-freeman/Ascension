@@ -7,6 +7,8 @@ using UnityEngine.Networking;
 using CONDUIT.UnityCL.Enums;
 using CONDUIT.UnityCL.Transports.Account;
 using CONDUIT.UnityCL.Transports.ErrorHandling;
+using UnityEngine.SceneManagement;
+using Assets.Scripts.Constants;
 
 public class MenuSceneButtonHandler : MonoBehaviour
 {
@@ -157,6 +159,15 @@ public class MenuSceneButtonHandler : MonoBehaviour
     {
         ProfilePanelAnimator.SetFloat(AnimationHashes.MENU_ProfileSlideDirection, 1.0f);
         TransToLogin(MAIN_MENU);
+    }
+
+    #endregion
+
+    #region MainMenu
+
+    public void OnPlayClicked()
+    {
+        SceneManager.LoadScene(Scenes.GAME);
     }
 
     #endregion
