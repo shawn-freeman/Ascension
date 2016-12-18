@@ -8,10 +8,12 @@ public class BulletScript : MonoBehaviour {
 	public GameObject objOwner;
 	public ParticleSystem hitEffect;
 
+    public float MaxLifeTime = 3;
+
 	// Use this for initialization
 	void Start () 
 	{
-		//objPlayer = (GameObject) GameObject.FindWithTag ("Player");
+
 	}
 	
 	public void Init(GameObject owner)
@@ -28,7 +30,6 @@ public class BulletScript : MonoBehaviour {
 		if(hitEffect != null) Destroy(hitEffect.gameObject, hitEffect.duration);
 
 		gameObject.SetActive (false);
-		//Destroy(gameObject);	
 	}
 	
 	// Update is called once per frame
@@ -37,11 +38,11 @@ public class BulletScript : MonoBehaviour {
 		timeSpentAlive += Time.deltaTime;
 		
 		//if bullet has been traveling for more than one second
-		if(timeSpentAlive > 1) dispose();
+		if(timeSpentAlive > MaxLifeTime) dispose();
+        
+        transform.rotation = objOwner.transform.rotation;
+		transform.Translate((transform.up * moveSpeed) * Time.deltaTime);
 		
-		//move the bullet
-		transform.Translate(0, 0, (moveSpeed * Time.deltaTime) * -1);
-		//Debug.Log(transform.position);
 		RaycastHit hit;
 		float distance = 0.5f;
 		
@@ -68,7 +69,6 @@ public class BulletScript : MonoBehaviour {
 					//dispose();
 				}
 			}
-			//if(aiScript != null) { aiScript.health -= 10; }
 		}
 		
 	}

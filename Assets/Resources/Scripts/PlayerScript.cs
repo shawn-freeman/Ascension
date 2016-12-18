@@ -25,10 +25,8 @@ public class PlayerScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		//Vector3 tempVector = new Vector3(Controller.inputMovement.x * SPEED * Time.deltaTime, 
-		//								Controller.inputMovement.y * SPEED  * Time.deltaTime, 0);
 		Vector3 tempVector = Controller.inputMovement * SPEED * Time.deltaTime;
-        Debug.Log(Controller.inputMovement);
+        
 		//GetComponent<Rigidbody2D>().AddForce(tempVector);
 		transform.position += tempVector;
 		
@@ -59,26 +57,26 @@ public class PlayerScript : MonoBehaviour {
 		//if(transform.position.x > border2.x) transform.position = border2;
 		if(Input.GetMouseButton(0) && Time.time >= nextFire) 
 		{
-			//FireBullet();
+			FireBullet();
 			nextFire = Time.time + fireRate;
 		}
 		//if(Input.GetMouseButton(0)) FireBullet();
 	}
-	
-	//void FireBullet()
-	//{	
-	//	//vec1 = transform.position + vec1.normalized;
-	//	Vector3 gunPosition1 = new Vector3(0.2f, 0, 0.1f);
-	//	Vector3 gunPosition2 = new Vector3(-0.2f, 0, 0.1f);
-		
-	//	BulletScript bullet = PoolManager.GetObject (LoadedAssets.PREFAB_BULLET).GetComponent<BulletScript>();//(GameObject)Instantiate(LoadedAssets.objBullet, transform.position + gunPosition1, transform.rotation);
-	//	bullet.transform.position = transform.position + gunPosition1;
-	//	bullet.transform.rotation = transform.rotation;
-	//	bullet.Init (this.gameObject);
 
-	//	bullet = PoolManager.GetObject (LoadedAssets.PREFAB_BULLET).GetComponent<BulletScript>();//(GameObject)Instantiate(LoadedAssets.objBullet, transform.position + gunPosition1, transform.rotation);
-	//	bullet.transform.position = transform.position + gunPosition2;
-	//	bullet.transform.rotation = transform.rotation;
-	//	bullet.Init (this.gameObject);
-	//}
+    void FireBullet()
+    {
+        //vec1 = transform.position + vec1.normalized;
+        Vector3 gunPosition1 = new Vector3(0.2f, 0, 0.1f);
+        Vector3 gunPosition2 = new Vector3(-0.2f, 0, 0.1f);
+
+        BulletScript bullet = PoolManager.GetObject(LoadedAssets.PREFAB_BULLET).GetComponent<BulletScript>();//(GameObject)Instantiate(LoadedAssets.objBullet, transform.position + gunPosition1, transform.rotation);
+        bullet.transform.position = transform.position + gunPosition1;
+        bullet.transform.rotation = transform.rotation;
+        bullet.Init(this.gameObject);
+
+        bullet = PoolManager.GetObject(LoadedAssets.PREFAB_BULLET).GetComponent<BulletScript>();//(GameObject)Instantiate(LoadedAssets.objBullet, transform.position + gunPosition1, transform.rotation);
+        bullet.transform.position = transform.position + gunPosition2;
+        bullet.transform.rotation = transform.rotation;
+        bullet.Init(this.gameObject);
+    }
 }
