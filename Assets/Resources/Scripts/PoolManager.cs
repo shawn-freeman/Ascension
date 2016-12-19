@@ -26,7 +26,7 @@ public class PoolManager : MonoBehaviour
 		foreach (GameObject gameObj in pool) 
 		{
 			//check if the current object
-			if(!gameObj.activeInHierarchy) return gameObj;
+			if(!gameObj.activeSelf) return gameObj;
 		}
 
 		//if point has been reached, create a new gameobject
