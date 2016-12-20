@@ -10,9 +10,12 @@ public class PlayerScript : MonoBehaviour {
 	public float fireRate;
 	public float nextFire;
 
+    private Rigidbody2D _rigidBody;
+
 	void Awake()
 	{
-	}
+        _rigidBody = GetComponent<Rigidbody2D>();
+    }
 		
 	// Use this for initialization
 	void Start () 
@@ -25,13 +28,11 @@ public class PlayerScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		Vector3 tempVector = Controller.inputMovement * SPEED * Time.deltaTime;
-        
-		//GetComponent<Rigidbody2D>().AddForce(tempVector);
-		transform.position += tempVector;
-		
-		//get the distance on the Z axis from the main cmaera to the player
-		float distCamToPlayer = Mathf.Abs(Camera.main.transform.position.z - transform.position.z);
+        Vector3 moveVector = Controller.inputMovement * SPEED * Time.deltaTime;
+        transform.position += moveVector;
+
+        //get the distance on the Z axis from the main cmaera to the player
+        float distCamToPlayer = Mathf.Abs(Camera.main.transform.position.z - transform.position.z);
 		//convert coordinates to world space
 		Vector3 leftBorder = Camera.main.ScreenToWorldPoint(new Vector3(gameObject.transform.lossyScale.x, 0, distCamToPlayer));
 		Vector3 rightBorder = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width - gameObject.transform.lossyScale.x, 0, distCamToPlayer));
@@ -54,18 +55,22 @@ public class PlayerScript : MonoBehaviour {
 			transform.position = v;
 		}
 		
-		//if(transform.position.x > border2.x) transform.position = border2;
 		if(Input.GetMouseButton(0) && Time.time >= nextFire) 
 		{
 			FireBullet();
 			nextFire = Time.time + fireRate;
 		}
-		//if(Input.GetMouseButton(0)) FireBullet();
 	}
+
+    private void FixedUpdate()
+    {
+        Vector3 moveVector = Controller.inputMovement * SPEED * Time.deltaTime;
+
+        //_rigidBody.MovePosition(transform.position + moveVector);
+    }
 
     void FireBullet()
     {
-        //vec1 = transform.position + vec1.normalized;
         Vector3 gunPosition1 = new Vector3(0.2f, 0, 0.1f);
         Vector3 gunPosition2 = new Vector3(-0.2f, 0, 0.1f);
 

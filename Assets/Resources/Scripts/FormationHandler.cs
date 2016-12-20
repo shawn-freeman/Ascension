@@ -15,7 +15,7 @@ public class FormationHandler : MonoBehaviour
 
         gameObject.SetActive(true);
 
-        Debug.Log(string.Format("Formation Activated {0} EnemyCount: {1}", name, children.Count));
+        //Debug.Log(string.Format("Formation Activated {0} EnemyCount: {1}", name, children.Count));
     }
 	
 	// Update is called once per frame
@@ -27,7 +27,7 @@ public class FormationHandler : MonoBehaviour
 
         if (children == null || children.Where(a => !a.activeSelf).Count() >= children.Count)
         {
-            Debug.Log(string.Format("Formation Deactivated {0} ActiveCount: {1}", name, children.Count(a => a.activeSelf)));
+            //Debug.Log(string.Format("Formation Deactivated {0} ActiveCount: {1}", name, children.Count(a => a.activeSelf)));
             gameObject.SetActive(false);
         }
 	}
