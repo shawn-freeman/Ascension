@@ -7,7 +7,7 @@ public class BulletScript : MonoBehaviour {
 	public float timeSpentAlive;		//how long the bullet has existed
 	public GameObject objOwner;
 
-	public ParticleSystem hitEffect;
+	public GameObject HitEffect;
 
     public float MaxLifeTime = 3;
     public float Damage = 5;
@@ -35,7 +35,7 @@ public class BulletScript : MonoBehaviour {
 	
 	public void dispose()
 	{
-		if(hitEffect != null) Destroy(hitEffect.gameObject, hitEffect.duration);
+		//if(hitEffect != null) Destroy(hitEffect.gameObject, hitEffect.duration);
 
 		gameObject.SetActive (false);
 	}
@@ -47,8 +47,6 @@ public class BulletScript : MonoBehaviour {
 		
 		//if bullet has been traveling for more than one second
 		if(timeSpentAlive > MaxLifeTime) dispose();
-
-        
 
 		RaycastHit hit;
 		float distance = 0.5f;
@@ -112,6 +110,11 @@ public class BulletScript : MonoBehaviour {
         else
         {
             Debug.Log("Colliding with Something Else");
+            EffectsScript effect = PoolManager.GetObject(LoadedAssets.EFFECT_BLUE_HIT).GetComponent<EffectsScript>();
+            effect.transform.position = transform.position;
+            effect.transform.rotation = transform.rotation;
+            effect.Init(1);
+
             BasicEnemy enemy = collision.gameObject.GetComponent<BasicEnemy>();
             enemy.OnDamage(Damage);
             gameObject.SetActive(false);
