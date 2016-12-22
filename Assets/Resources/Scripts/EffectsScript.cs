@@ -24,12 +24,18 @@ public class EffectsScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        
+	}
+
+    public void OnAnimationComplete()
+    {
+
         var numLoops = (int)_animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
         float playbackPercentage = _animator.GetCurrentAnimatorStateInfo(0).normalizedTime % 1;
 
-        if (numLoops > _maxLoops)
+        if (_maxLoops == 1 && numLoops >= _maxLoops)
         {
             gameObject.SetActive(false);
         }
-	}
+    }
 }
