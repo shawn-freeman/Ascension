@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 using Assets.Resources.Scripts.Enums;
+using Assets.Resources.Scripts.Abstract;
+using System.Collections.Generic;
 
 public class BulletScript : MonoBehaviour {
 	
@@ -15,13 +17,17 @@ public class BulletScript : MonoBehaviour {
 
     private Rigidbody2D _rigidbody;
 
+    public List<WeaponMod> Mods;
+
+    public float nullTime;
+
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
     }
     void Start () 
 	{
-
+        
 	}
 	
 	public void Init(GameObject owner)
@@ -30,24 +36,26 @@ public class BulletScript : MonoBehaviour {
         transform.rotation = objOwner.transform.rotation;
         //AudioSource.PlayClipAtPoint(LoadedAssets.SFX_LASER, Camera.main.transform.position);
         timeSpentAlive = 0;
-		gameObject.SetActive (true);
+        nullTime = 0.025f;
+        gameObject.SetActive (true);
 	}
 
 	
 	public void dispose()
 	{
-		//if(hitEffect != null) Destroy(hitEffect.gameObject, hitEffect.duration);
-
+        //if(hitEffect != null) Destroy(hitEffect.gameObject, hitEffect.duration);
+        Mods = new List<WeaponMod>();
 		gameObject.SetActive (false);
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-		timeSpentAlive += Time.deltaTime;
-		
-		//if bullet has been traveling for more than one second
-		if(timeSpentAlive > MaxLifeTime) dispose();
+        
+        timeSpentAlive += Time.deltaTime;
+
+        //if bullet has been traveling for more than one second
+        if (timeSpentAlive > MaxLifeTime) dispose();
 
 		RaycastHit hit;
 		float distance = 0.5f;
@@ -101,12 +109,17 @@ public class BulletScript : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (timeSpentAlive < nullTime) return;
         if (collision.gameObject.GetComponent<PlayerScript>())
         {
             Debug.Log("Colliding with Player");
         }
         else if(collision.gameObject.GetComponent<BasicEnemy>())
         {
+            foreach (var mod in Mods)
+            {
+                mod.OnHit(this);
+            }
             EffectsScript effect = PoolManager.GetObject(LoadedAssets.EFFECTS_PREFAB).GetComponent<EffectsScript>();
             effect.transform.position = transform.position;
             effect.transform.rotation = transform.rotation;

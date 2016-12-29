@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using Assets.Scripts.Constants;
+using Assets.Resources.Scripts.Pocos;
+using System.Collections.Generic;
 
 public class PlayerScript : MonoBehaviour {
 	
@@ -9,9 +11,8 @@ public class PlayerScript : MonoBehaviour {
 	
 	//public Gun currentWeapon;
 	public float health;
-	public float fireRate;
-	public float nextFire;
 
+    public Weapon CurrentWeapon;
     private Rigidbody2D _rigidBody;
 
 	void Awake()
@@ -22,9 +23,10 @@ public class PlayerScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		fireRate = 0.1f;
-		nextFire = 0.0f;
-		//currentWeapon = new Gun();
+        CurrentWeapon = new Weapon();
+        CurrentWeapon.Init(this.gameObject, 
+                            new List<Vector3>() { new Vector3(0.2f, 0, 0.1f), new Vector3(-0.2f, 0, 0.1f) }
+                            );
 	}
 	
 	// Update is called once per frame
@@ -57,10 +59,9 @@ public class PlayerScript : MonoBehaviour {
 			transform.position = v;
 		}
 		
-		if(Input.GetMouseButton(0) && Time.time >= nextFire) 
+		if(Input.GetMouseButton(0)) 
 		{
-			FireBullet();
-			nextFire = Time.time + fireRate;
+            CurrentWeapon.Attack();
 		}
 	}
 
