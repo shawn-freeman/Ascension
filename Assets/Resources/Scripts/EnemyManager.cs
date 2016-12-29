@@ -29,7 +29,6 @@ public class EnemyManager : MonoBehaviour
             positions.Select(a =>
             {
                 BasicEnemy enemy = PoolManager.GetObject(LoadedAssets.ALIENTIER1_SHIP_1).GetComponent<BasicEnemy>();
-                //Debug.Log(string.Format("{0} {1} {2}", enemy.name, a.position, a.rotation));
                 enemy.transform.SetParent(formation.transform);
                 enemy.transform.position = a.position;
                 enemy.transform.rotation = a.rotation;
