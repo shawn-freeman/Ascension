@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
+using Assets.Scripts.Constants;
 
 public class PlayerScript : MonoBehaviour {
 	
@@ -83,5 +85,18 @@ public class PlayerScript : MonoBehaviour {
         bullet.transform.position = transform.position + gunPosition2;
         bullet.transform.rotation = transform.rotation;
         bullet.Init(this.gameObject);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log("Player Trigger Enter " + collision.gameObject.name + " Health: " + health);
+
+        if (collision.gameObject.tag.Contains("Enemy"))
+        {
+            health -= 1;
+
+            if (health <= 0) { SceneManager.LoadScene(Scenes.MAIN_MENU); }
+
+        }
     }
 }
