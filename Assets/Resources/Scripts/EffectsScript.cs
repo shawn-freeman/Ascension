@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Assets.Resources.Scripts.Enums;
 
 public class EffectsScript : MonoBehaviour {
 
@@ -7,18 +8,27 @@ public class EffectsScript : MonoBehaviour {
     private Animator _animator;
 
     private int _maxLoops = 1;
-    // Use this for initialization
-    void Start()
+    private 
+    
+    void Awake()
     {
+        Debug.Log("Awake");
         _renderer = gameObject.GetComponent<SpriteRenderer>();
         _animator = gameObject.GetComponent<Animator>();
     }
-
-    public void Init(int maxLoops)
+    void Start()
     {
-        _animator.Play(AnimationHashes.EFFECT_BLUE_HIT);
-        _maxLoops = maxLoops;
+        Debug.Log("Start");
+    }
+
+    public void Init(EFFECTS effect, int maxLoops)
+    {
+        Debug.Log("Init " + (_animator != null) + " " + effect );
         gameObject.SetActive(true);
+        _animator.SetInteger(AnimationHashes.EFFECTS_ANIMATION_ID, (int)effect);
+        _animator.speed = 0.5f;
+        _maxLoops = maxLoops;
+        
     }
 	
 	// Update is called once per frame
@@ -35,6 +45,7 @@ public class EffectsScript : MonoBehaviour {
 
         if (_maxLoops == 1 && numLoops >= _maxLoops)
         {
+            _animator.SetInteger(AnimationHashes.EFFECTS_ANIMATION_ID, -1);
             gameObject.SetActive(false);
         }
     }

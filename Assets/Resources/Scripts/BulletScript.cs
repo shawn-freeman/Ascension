@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Assets.Resources.Scripts.Enums;
 
 public class BulletScript : MonoBehaviour {
 	
@@ -63,7 +64,6 @@ public class BulletScript : MonoBehaviour {
 		//		//if the bullet hit an enemy
 		//		if(collided.tag == "Enemy") 
 		//		{
-  //                  Debug.Log("Enemy Hit");
 		//			BasicEnemy enemy = hit.collider.gameObject.GetComponent<BasicEnemy>();
   //                  enemy.OnDamage(10);
   //                  //EffectsAnimator effect = PoolManager.GetObject(LoadedAssets.PREFAB_EFFECTS.gameObject).GetComponent<EffectsAnimator>();
@@ -101,19 +101,16 @@ public class BulletScript : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Bullet Trigger Enter" + collision.gameObject.name);
-
         if (collision.gameObject.GetComponent<PlayerScript>())
         {
             Debug.Log("Colliding with Player");
         }
-        else
+        else if(collision.gameObject.GetComponent<BasicEnemy>())
         {
-            Debug.Log("Colliding with Something Else");
-            EffectsScript effect = PoolManager.GetObject(LoadedAssets.EFFECT_BLUE_HIT).GetComponent<EffectsScript>();
+            EffectsScript effect = PoolManager.GetObject(LoadedAssets.EFFECTS_PREFAB).GetComponent<EffectsScript>();
             effect.transform.position = transform.position;
             effect.transform.rotation = transform.rotation;
-            effect.Init(1);
+            effect.Init(EFFECTS.BlueHit, 1);
 
             BasicEnemy enemy = collision.gameObject.GetComponent<BasicEnemy>();
             enemy.OnDamage(Damage);

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Assets.Resources.Scripts.Enums;
 
 public class BasicEnemy : MonoBehaviour
 {
@@ -49,6 +50,14 @@ public class BasicEnemy : MonoBehaviour
     {
         Health -= damage;
 
-        if (Health <= 0) gameObject.SetActive(false);
+        if (Health <= 0)
+        {
+            EffectsScript effect = PoolManager.GetObject(LoadedAssets.EFFECTS_PREFAB).GetComponent<EffectsScript>();
+            effect.transform.position = transform.position + Vector3.back;
+            effect.transform.rotation = transform.rotation;
+            effect.Init(EFFECTS.PurpleExplosion, 1);
+
+            gameObject.SetActive(false);
+        }
     }
 }
