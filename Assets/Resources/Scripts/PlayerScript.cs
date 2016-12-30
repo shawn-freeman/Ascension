@@ -13,11 +13,10 @@ public class PlayerScript : MonoBehaviour {
 	public float health;
 
     public Weapon CurrentWeapon;
-    private Rigidbody2D _rigidBody;
 
 	void Awake()
 	{
-        _rigidBody = GetComponent<Rigidbody2D>();
+
     }
 		
 	// Use this for initialization
@@ -72,21 +71,21 @@ public class PlayerScript : MonoBehaviour {
         //_rigidBody.MovePosition(transform.position + moveVector);
     }
 
-    void FireBullet()
-    {
-        Vector3 gunPosition1 = new Vector3(0.2f, 0, 0.1f);
-        Vector3 gunPosition2 = new Vector3(-0.2f, 0, 0.1f);
+    //void FireBullet()
+    //{
+    //    Vector3 gunPosition1 = new Vector3(0.2f, 0, 0.1f);
+    //    Vector3 gunPosition2 = new Vector3(-0.2f, 0, 0.1f);
 
-        BulletScript bullet = PoolManager.GetObject(LoadedAssets.PREFAB_BULLET).GetComponent<BulletScript>();//(GameObject)Instantiate(LoadedAssets.objBullet, transform.position + gunPosition1, transform.rotation);
-        bullet.transform.position = transform.position + gunPosition1;
-        bullet.transform.rotation = transform.rotation;
-        bullet.Init(this.gameObject);
+    //    BulletScript bullet = PoolManager.GetObject(LoadedAssets.PREFAB_BULLET).GetComponent<BulletScript>();//(GameObject)Instantiate(LoadedAssets.objBullet, transform.position + gunPosition1, transform.rotation);
+    //    bullet.transform.position = transform.position + gunPosition1;
+    //    bullet.transform.rotation = transform.rotation;
+    //    bullet.Init(this.gameObject);
 
-        bullet = PoolManager.GetObject(LoadedAssets.PREFAB_BULLET).GetComponent<BulletScript>();//(GameObject)Instantiate(LoadedAssets.objBullet, transform.position + gunPosition1, transform.rotation);
-        bullet.transform.position = transform.position + gunPosition2;
-        bullet.transform.rotation = transform.rotation;
-        bullet.Init(this.gameObject);
-    }
+    //    bullet = PoolManager.GetObject(LoadedAssets.PREFAB_BULLET).GetComponent<BulletScript>();//(GameObject)Instantiate(LoadedAssets.objBullet, transform.position + gunPosition1, transform.rotation);
+    //    bullet.transform.position = transform.position + gunPosition2;
+    //    bullet.transform.rotation = transform.rotation;
+    //    bullet.Init(this.gameObject);
+    //}
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
