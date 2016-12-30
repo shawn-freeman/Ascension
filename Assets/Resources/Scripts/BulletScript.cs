@@ -3,6 +3,9 @@ using System.Collections;
 using Assets.Resources.Scripts.Enums;
 using Assets.Resources.Scripts.Abstract;
 using System.Collections.Generic;
+using System;
+using Assets.Resources.Scripts.Pocos;
+using System.Linq;
 
 public class BulletScript : MonoBehaviour {
 	
@@ -15,38 +18,59 @@ public class BulletScript : MonoBehaviour {
     public float MaxLifeTime = 3;
     public float Damage = 5;
 
-    private Rigidbody2D _rigidbody;
-
     public List<WeaponMod> Mods;
 
     public float nullTime;
+    
+    public List<ColliderDescriptor> ColliderPresets;
+
+    public int CurrentAnimationValue
+    {
+        get {
+            return _animator.GetInteger(AnimationHashes.PROJECTILE_ANIMATION_ID);
+        }
+    }
+
+    private Rigidbody2D _rigidbody;
+    private Animator _animator;
+    private BoxCollider2D _collider;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+        _animator = GetComponent<Animator>();
+        _collider = GetComponent<BoxCollider2D>();
     }
     void Start () 
 	{
         
 	}
 	
-	public void Init(GameObject owner)
+	public void Init(GameObject owner, int animation, bool isChild = false)
 	{
 		objOwner = owner;
         transform.rotation = objOwner.transform.rotation;
         //AudioSource.PlayClipAtPoint(LoadedAssets.SFX_LASER, Camera.main.transform.position);
         timeSpentAlive = 0;
-        nullTime = 0.025f;
-        gameObject.SetActive (true);
-	}
+        nullTime = isChild ? 0.025f : 0.0f;
 
+        
+
+        gameObject.SetActive (true);
+
+        _animator.SetInteger(AnimationHashes.PROJECTILE_ANIMATION_ID, animation);
+        _collider.size = ColliderPresets.FirstOrDefault(a => a.Id == animation).Size;
+        _collider.offset = ColliderPresets.FirstOrDefault(a => a.Id == animation).Offset;
+    }
 	
 	public void dispose()
 	{
         //if(hitEffect != null) Destroy(hitEffect.gameObject, hitEffect.duration);
+        objOwner = null;
         Mods = new List<WeaponMod>();
-		gameObject.SetActive (false);
-	}
+        _animator.SetInteger(AnimationHashes.PROJECTILE_ANIMATION_ID, -1);
+        gameObject.SetActive (false);
+    }
 	
 	// Update is called once per frame
 	void Update () 

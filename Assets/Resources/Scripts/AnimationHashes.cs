@@ -10,4 +10,5 @@ public class AnimationHashes {
     public static int EFFECT_PURPLE_EXPLOSION = Animator.StringToHash("PurpleExplosion");
 
     public static int EFFECTS_ANIMATION_ID = Animator.StringToHash("EffectId");
+    public static int PROJECTILE_ANIMATION_ID = Animator.StringToHash("ProjectileId");
 }

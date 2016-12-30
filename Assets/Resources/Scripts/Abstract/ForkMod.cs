@@ -10,19 +10,17 @@ namespace Assets.Resources.Scripts.Abstract
     {
         public override void OnHit(BulletScript projectile)
         {
-            var rotation = projectile.gameObject.transform.rotation;
-
-            BulletScript bullet = PoolManager.GetObject(LoadedAssets.PREFAB_BULLET).GetComponent<BulletScript>();
-            bullet.Init(projectile.objOwner);
-            bullet.transform.position = projectile.transform.transform.position;
+            BulletScript bullet = PoolManager.GetObject(LoadedAssets.PROJECTILE_PREFAB).GetComponent<BulletScript>();
+            bullet.Init(projectile.objOwner, projectile.CurrentAnimationValue, true);
+            bullet.transform.position = projectile.transform.position;
             bullet.transform.rotation = projectile.transform.rotation;
             bullet.transform.Rotate(Vector3.forward, 30);
             bullet.nullTime = 0.1f;
             base.OnCreate(bullet);
 
-            bullet = PoolManager.GetObject(LoadedAssets.PREFAB_BULLET).GetComponent<BulletScript>();
-            bullet.Init(projectile.objOwner);
-            bullet.transform.position = projectile.transform.transform.position;
+            bullet = PoolManager.GetObject(LoadedAssets.PROJECTILE_PREFAB).GetComponent<BulletScript>();
+            bullet.Init(projectile.objOwner, projectile.CurrentAnimationValue, true);
+            bullet.transform.position = projectile.transform.position;
             bullet.transform.rotation = projectile.transform.rotation;
             bullet.transform.Rotate(Vector3.back, 30);
             bullet.nullTime = 0.1f;

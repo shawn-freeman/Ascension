@@ -11,13 +11,14 @@ public class LoadedAssets : MonoBehaviour {
     public static GameObject ALIENTIER1_SHIP_1;
     public static GameObject FORMATION_DIAMOND;
 
+    public static GameObject BLUE_PLASMA;
+    public static GameObject PROJECTILE_PREFAB;
 
     #endregion
 
     #region Effect Prefabs
 
     public static GameObject EFFECTS_PREFAB;
-    public static GameObject EFFECT_BLUE_HIT;
 
     #endregion
 
@@ -34,8 +35,11 @@ public class LoadedAssets : MonoBehaviour {
 		PREFAB_BULLET = (GameObject)Resources.Load("Prefabs/GatlingLaser", typeof(GameObject));
         ALIENTIER1_SHIP_1 = (GameObject)Resources.Load("Prefabs/AlienTier1_Ship1", typeof(GameObject));
         FORMATION_DIAMOND = (GameObject)Resources.Load("Prefabs/Formation_Diamond", typeof(GameObject));
-        EFFECT_BLUE_HIT = (GameObject)Resources.Load("Prefabs/BlueHit", typeof(GameObject));
+
         EFFECTS_PREFAB = (GameObject)Resources.Load("Prefabs/EffectsPrefab", typeof(GameObject));
+
+        BLUE_PLASMA = (GameObject)Resources.Load("Prefabs/BluePlasma", typeof(GameObject));
+        PROJECTILE_PREFAB = (GameObject)Resources.Load("Prefabs/ProjectilePrefab", typeof(GameObject));
 
         Debug.Log("Loaded Assets!");
     }
