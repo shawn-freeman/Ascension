@@ -25,7 +25,9 @@ namespace Assets.Resources.Scripts.Pocos
             this.Owner = owner;
             ProjectilePositions = positions;
 
-            WeaponMods = new List<WeaponMod>() { new ForkMod() };
+            WeaponMods = new List<WeaponMod>() {
+                new ForkMod(),
+                new PierceMod() };
 
             ProjectilePrefab = LoadedAssets.BLUE_PLASMA;
         }

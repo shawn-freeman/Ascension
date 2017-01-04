@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 68178e522daf38549bc449429ef156b3
-timeCreated: 1483060676
+timeCreated: 1483116877
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -65,8 +65,8 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 86
-        height: 86
+        width: 129
+        height: 129
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -76,10 +76,10 @@ TextureImporter:
       name: blue_plasma_projectile_1
       rect:
         serializedVersion: 2
-        x: 86
+        x: 129
         y: 0
-        width: 86
-        height: 86
+        width: 129
+        height: 129
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -89,10 +89,10 @@ TextureImporter:
       name: blue_plasma_projectile_2
       rect:
         serializedVersion: 2
-        x: 172
+        x: 258
         y: 0
-        width: 86
-        height: 86
+        width: 129
+        height: 129
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -102,10 +102,10 @@ TextureImporter:
       name: blue_plasma_projectile_3
       rect:
         serializedVersion: 2
-        x: 258
+        x: 387
         y: 0
-        width: 86
-        height: 86
+        width: 129
+        height: 129
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,10 +115,10 @@ TextureImporter:
       name: blue_plasma_projectile_4
       rect:
         serializedVersion: 2
-        x: 344
+        x: 516
         y: 0
-        width: 86
-        height: 86
+        width: 129
+        height: 129
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,10 +128,10 @@ TextureImporter:
       name: blue_plasma_projectile_5
       rect:
         serializedVersion: 2
-        x: 430
+        x: 645
         y: 0
-        width: 86
-        height: 86
+        width: 129
+        height: 129
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,10 +141,10 @@ TextureImporter:
       name: blue_plasma_projectile_6
       rect:
         serializedVersion: 2
-        x: 516
+        x: 774
         y: 0
-        width: 86
-        height: 86
+        width: 129
+        height: 129
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

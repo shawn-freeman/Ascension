@@ -15,6 +15,7 @@ public class BulletScript : MonoBehaviour {
 
 	public GameObject HitEffect;
 
+    public bool IsImmortal;
     public float MaxLifeTime = 3;
     public float Damage = 5;
 
@@ -23,6 +24,8 @@ public class BulletScript : MonoBehaviour {
     public float nullTime;
     
     public List<ColliderDescriptor> ColliderPresets;
+    public List<GameObject> PreviouslyCollided;
+
 
     public int CurrentAnimationValue
     {
@@ -54,8 +57,8 @@ public class BulletScript : MonoBehaviour {
         timeSpentAlive = 0;
         nullTime = isChild ? 0.025f : 0.0f;
 
-        
-
+        PreviouslyCollided = new List<GameObject>();
+        IsImmortal = false;
         gameObject.SetActive (true);
 
         _animator.SetInteger(AnimationHashes.PROJECTILE_ANIMATION_ID, animation);
@@ -121,7 +124,6 @@ public class BulletScript : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-
         if (collision.gameObject.GetComponent<PlayerScript>())
         {
 
@@ -133,6 +135,8 @@ public class BulletScript : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        bool performOnHit = false;
+
         if (timeSpentAlive < nullTime) return;
         if (collision.gameObject.GetComponent<PlayerScript>())
         {
@@ -140,18 +144,32 @@ public class BulletScript : MonoBehaviour {
         }
         else if(collision.gameObject.GetComponent<BasicEnemy>())
         {
-            foreach (var mod in Mods)
-            {
-                mod.OnHit(this);
-            }
-            EffectsScript effect = PoolManager.GetObject(LoadedAssets.EFFECTS_PREFAB).GetComponent<EffectsScript>();
-            effect.transform.position = transform.position;
-            effect.transform.rotation = transform.rotation;
-            effect.Init(EFFECTS.BlueHit, 1);
-
             BasicEnemy enemy = collision.gameObject.GetComponent<BasicEnemy>();
-            enemy.OnDamage(Damage);
-            gameObject.SetActive(false);
+
+            performOnHit = RunMods(collision);
+
+            if (performOnHit)
+            {
+                EffectsScript effect = PoolManager.GetObject(LoadedAssets.EFFECTS_PREFAB).GetComponent<EffectsScript>();
+                effect.transform.position = transform.position;
+                effect.transform.rotation = transform.rotation;
+                effect.Init(EFFECTS.BlueHit, 1);
+
+                enemy.OnDamage(Damage);
+            }
+            
+            if(!IsImmortal) gameObject.SetActive(false);
         }
+    }
+
+    private bool RunMods(Collider2D collision)
+    {
+        var boolVals = new List<bool>();
+        foreach (var mod in Mods)
+        {
+            boolVals.Add(mod.OnHit(this, collision.gameObject));
+        }
+
+        return boolVals.Any(a => a == true);
     }
 }

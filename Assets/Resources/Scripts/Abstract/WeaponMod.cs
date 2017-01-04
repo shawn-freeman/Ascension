@@ -22,7 +22,7 @@ namespace Assets.Resources.Scripts.Abstract
         }
 
         public bool UsesOnHit;
-        public virtual void OnHit(BulletScript projectile) { }
+        public virtual bool OnHit(BulletScript projectile, params GameObject[] paramGameObj) { return false; }
 
         public bool UsesOnAttack;
         public virtual void OnAttack() { }

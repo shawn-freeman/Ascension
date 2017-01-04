@@ -8,7 +8,7 @@ namespace Assets.Resources.Scripts.Abstract
 {
     public class ForkMod : WeaponMod
     {
-        public override void OnHit(BulletScript projectile)
+        public override bool OnHit(BulletScript projectile, params GameObject[] paramGameObj)
         {
             BulletScript bullet = PoolManager.GetObject(LoadedAssets.PROJECTILE_PREFAB).GetComponent<BulletScript>();
             bullet.Init(projectile.objOwner, projectile.CurrentAnimationValue, true);
@@ -25,6 +25,8 @@ namespace Assets.Resources.Scripts.Abstract
             bullet.transform.Rotate(Vector3.back, 30);
             bullet.nullTime = 0.1f;
             base.OnCreate(bullet);
+
+            return true;
         }
     }
 }
