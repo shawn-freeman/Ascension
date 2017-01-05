@@ -6,14 +6,17 @@ using System.Collections.Generic;
 using System;
 using Assets.Resources.Scripts.Pocos;
 using System.Linq;
+using Assets.Resources;
+using Assets.Resources.Scripts.Interfaces;
 
-public class BulletScript : MonoBehaviour {
+public class BulletScript : ExtendedMonoBehavior
+{
 	
 	public float moveSpeed = 0.5f;		//how fast the bullet moves
-	public float timeSpentAlive;		//how long the bullet has existed
-	public GameObject objOwner;
+	public float timeSpentAlive;        //how long the bullet has existed
+    public GameObject objOwner;
 
-	public GameObject HitEffect;
+    public GameObject HitEffect;
 
     public bool IsImmortal;
     public float MaxLifeTime = 3;
@@ -34,11 +37,11 @@ public class BulletScript : MonoBehaviour {
         }
     }
 
-    private Rigidbody2D _rigidbody;
-    private Animator _animator;
-    private BoxCollider2D _collider;
+    protected Rigidbody2D _rigidbody;
+    protected Animator _animator;
+    protected BoxCollider2D _collider;
 
-    private void Awake()
+    public void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
@@ -60,7 +63,7 @@ public class BulletScript : MonoBehaviour {
         PreviouslyCollided = new List<GameObject>();
         IsImmortal = false;
         gameObject.SetActive (true);
-
+        Mods = new List<WeaponMod>();
         _animator.SetInteger(AnimationHashes.PROJECTILE_ANIMATION_ID, animation);
         _collider.size = ColliderPresets.FirstOrDefault(a => a.Id == animation).Size;
         _collider.offset = ColliderPresets.FirstOrDefault(a => a.Id == animation).Offset;
@@ -70,53 +73,22 @@ public class BulletScript : MonoBehaviour {
 	{
         //if(hitEffect != null) Destroy(hitEffect.gameObject, hitEffect.duration);
         objOwner = null;
-        Mods = new List<WeaponMod>();
+        Mods = null;
         _animator.SetInteger(AnimationHashes.PROJECTILE_ANIMATION_ID, -1);
         gameObject.SetActive (false);
     }
 	
 	// Update is called once per frame
-	void Update () 
+	public void Update () 
 	{
         
         timeSpentAlive += Time.deltaTime;
 
         //if bullet has been traveling for more than one second
         if (timeSpentAlive > MaxLifeTime) dispose();
-
-		RaycastHit hit;
-		float distance = 0.5f;
-		
-		//check for collsion against the ray
-		//if(Physics.Raycast(transform.position, transform.up, out hit, distance))
-		//{	
-		//	//the game object 
-		//	GameObject collided = hit.collider.gameObject;
-			
-		//	//make sure projectile has not collided with another projectile
-		//	if(collided.tag != "Projectile")
-		//	{
-		//		//if the bullet hit an enemy
-		//		if(collided.tag == "Enemy") 
-		//		{
-		//			BasicEnemy enemy = hit.collider.gameObject.GetComponent<BasicEnemy>();
-  //                  enemy.OnDamage(10);
-  //                  //EffectsAnimator effect = PoolManager.GetObject(LoadedAssets.PREFAB_EFFECTS.gameObject).GetComponent<EffectsAnimator>();
-  //                  //effect.transform.position = transform.position;
-  //                  //effect.transform.rotation = transform.rotation;
-  //                  //effect.SetAnimation(EffectsAnimator.EffectAnimations.BLUE_HIT);
-
-  //                  //hitEffect = (ParticleSystem)Instantiate(LoadedAssets.PARTICLE_BULLET_HIT, transform.position, Quaternion.identity);
-  //                  dispose();
-		//		}
-		//	}
-		//}
-
-        
-		
 	}
 
-    private void FixedUpdate()
+    public void FixedUpdate()
     {
         Vector3 moveVector = transform.position + ((transform.up * moveSpeed) * Time.deltaTime);
         _rigidbody.MovePosition(moveVector);
@@ -138,28 +110,24 @@ public class BulletScript : MonoBehaviour {
         bool performOnHit = false;
 
         if (timeSpentAlive < nullTime) return;
-        if (collision.gameObject.GetComponent<PlayerScript>())
+
+        var damagable = collision.gameObject.GetComponent<IDamagable>();
+
+        if (damagable == null || damagable == objOwner.GetComponent<IDamagable>()) return;
+
+        performOnHit = RunMods(collision);
+
+        if (performOnHit)
         {
-            Debug.Log("Colliding with Player");
+            EffectsScript effect = PoolManager.GetObject(LoadedAssets.EFFECTS_PREFAB).GetComponent<EffectsScript>();
+            effect.transform.position = transform.position;
+            effect.transform.rotation = transform.rotation;
+            effect.Init(EFFECTS.BlueHit, 1);
+
+            damagable.OnDamage(Damage);
         }
-        else if(collision.gameObject.GetComponent<BasicEnemy>())
-        {
-            BasicEnemy enemy = collision.gameObject.GetComponent<BasicEnemy>();
-
-            performOnHit = RunMods(collision);
-
-            if (performOnHit)
-            {
-                EffectsScript effect = PoolManager.GetObject(LoadedAssets.EFFECTS_PREFAB).GetComponent<EffectsScript>();
-                effect.transform.position = transform.position;
-                effect.transform.rotation = transform.rotation;
-                effect.Init(EFFECTS.BlueHit, 1);
-
-                enemy.OnDamage(Damage);
-            }
             
-            if(!IsImmortal) gameObject.SetActive(false);
-        }
+        if(!IsImmortal) gameObject.SetActive(false);
     }
 
     private bool RunMods(Collider2D collision)

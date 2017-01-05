@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Assets.Resources.Scripts.Enums;
+using Assets.Resources.Scripts.Interfaces;
+using Assets.Resources;
 
-public class BasicEnemy : MonoBehaviour
+public class BasicEnemy : ExtendedMonoBehavior, IDamagable
 {
     public float MOVE_SPEED;
 

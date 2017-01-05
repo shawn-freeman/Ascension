@@ -11,13 +11,11 @@ public class EffectsScript : MonoBehaviour {
     
     void Awake()
     {
-        Debug.Log("Awake");
         _renderer = gameObject.GetComponent<SpriteRenderer>();
         _animator = gameObject.GetComponent<Animator>();
     }
     void Start()
     {
-        Debug.Log("Start");
     }
 
     public void Init(EFFECTS effect, int maxLoops)

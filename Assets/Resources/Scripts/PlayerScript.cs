@@ -4,9 +4,11 @@ using UnityEngine.SceneManagement;
 using Assets.Scripts.Constants;
 using Assets.Resources.Scripts.Pocos;
 using System.Collections.Generic;
+using Assets.Resources.Scripts.Interfaces;
+using Assets.Resources;
 
-public class PlayerScript : MonoBehaviour {
-	
+public class PlayerScript : ExtendedMonoBehavior, IDamagable
+{	
 	public const float SPEED = 5.0f;
 	
 	//public Gun currentWeapon;
@@ -66,26 +68,10 @@ public class PlayerScript : MonoBehaviour {
 
     private void FixedUpdate()
     {
-        Vector3 moveVector = Controller.inputMovement * SPEED * Time.deltaTime;
+        //Vector3 moveVector = Controller.inputMovement * SPEED * Time.deltaTime;
 
         //_rigidBody.MovePosition(transform.position + moveVector);
     }
-
-    //void FireBullet()
-    //{
-    //    Vector3 gunPosition1 = new Vector3(0.2f, 0, 0.1f);
-    //    Vector3 gunPosition2 = new Vector3(-0.2f, 0, 0.1f);
-
-    //    BulletScript bullet = PoolManager.GetObject(LoadedAssets.PREFAB_BULLET).GetComponent<BulletScript>();//(GameObject)Instantiate(LoadedAssets.objBullet, transform.position + gunPosition1, transform.rotation);
-    //    bullet.transform.position = transform.position + gunPosition1;
-    //    bullet.transform.rotation = transform.rotation;
-    //    bullet.Init(this.gameObject);
-
-    //    bullet = PoolManager.GetObject(LoadedAssets.PREFAB_BULLET).GetComponent<BulletScript>();//(GameObject)Instantiate(LoadedAssets.objBullet, transform.position + gunPosition1, transform.rotation);
-    //    bullet.transform.position = transform.position + gunPosition2;
-    //    bullet.transform.rotation = transform.rotation;
-    //    bullet.Init(this.gameObject);
-    //}
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -93,10 +79,14 @@ public class PlayerScript : MonoBehaviour {
 
         if (collision.gameObject.tag.Contains("Enemy"))
         {
-            health -= 1;
-
-            if (health <= 0) { SceneManager.LoadScene(Scenes.MAIN_MENU); }
-
+            OnDamage(1);
         }
+    }
+
+    public void OnDamage(float damage)
+    {
+        health -= damage;
+
+        if (health <= 0) { SceneManager.LoadScene(Scenes.MAIN_MENU); }
     }
 }

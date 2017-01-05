@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Assets.Resources.Scripts.Abstract
 {
-    public class PierceMod :WeaponMod
+    public class PierceMod : WeaponMod
     {
         public override void OnCreate(BulletScript projectile)
         {
