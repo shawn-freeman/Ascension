@@ -6,6 +6,26 @@ using System;
 
 public class BackgroundManager : MonoBehaviour
 {
+    private static BackgroundManager _instance;
+    public static BackgroundManager _Instance
+    {
+        get
+        {
+            //check that the singleton has not been set yet
+            if (_instance == null)
+            {
+                _instance = GameObject.FindObjectOfType<BackgroundManager>();
+
+                //no object with this component exists, throw an error
+                if (_instance == null)
+                {
+                    throw new Exception("Could not find a gameobject with the BackgroundManager component.");
+                }
+            }
+
+            return _instance;
+        }
+    }
 
     public static float STAGE_WIDTH_RATIO;
     public static float STAGE_HEIGHT_RATIO;
@@ -23,7 +43,6 @@ public class BackgroundManager : MonoBehaviour
 
     void Awake()
     {
-        Debug.Log("Main Awake Executed!");
         Debug.Log(Screen.width + " " + Screen.height);
         STAGE_WIDTH_RATIO = Screen.width / 800.0f;
         STAGE_HEIGHT_RATIO = Screen.height / 600.0f;
