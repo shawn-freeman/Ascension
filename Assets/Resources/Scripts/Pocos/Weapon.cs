@@ -16,7 +16,7 @@ namespace Assets.Resources.Scripts.Pocos
 
         public GameObject ProjectilePrefab;
 
-        private float AttackRate = 0.5f;
+        private float AttackRate = 1.0f;
         public float LastAttack = 0.0f;
         public float Damage;
 
@@ -27,7 +27,9 @@ namespace Assets.Resources.Scripts.Pocos
 
             WeaponMods = new List<WeaponMod>() {
                 new ForkMod(),
-                new PierceMod() };
+                //new PierceMod(),
+                new IncreaseAoeMod(2.0f)
+            };
 
             ProjectilePrefab = LoadedAssets.BLUE_PLASMA;
         }
@@ -38,10 +40,10 @@ namespace Assets.Resources.Scripts.Pocos
             
             foreach (var position in ProjectilePositions)
             {
-                BulletScript bullet = PoolManager.GetObject(LoadedAssets.PROJECTILE_PREFAB).GetComponent<BulletScript>();
+                BulletScript bullet = PoolManager.GetObject(LoadedAssets.PERIODIC_AOE_PREFAB).GetComponent<BulletScript>();
                 bullet.transform.position = Owner.transform.position + position;
                 bullet.transform.rotation = Owner.transform.rotation;
-                bullet.Init(Owner.gameObject, (int)ProjectileAnimationValues.BluePlasma);
+                bullet.Init(Owner.gameObject, (int)ProjectileAnimationValues.EnergyOrb);
 
                 foreach (var mod in WeaponMods)
                 {

@@ -48,7 +48,7 @@ public class BasicEnemy : ExtendedMonoBehavior, IDamagable
         _rigidbody.MovePosition(transform.position + ((transform.up * MOVE_SPEED) * Time.deltaTime));
     }
 
-    public void OnDamage(float damage)
+    public bool OnDamage(float damage)
     {
         Health -= damage;
 
@@ -60,6 +60,9 @@ public class BasicEnemy : ExtendedMonoBehavior, IDamagable
             effect.Init(EFFECTS.PurpleExplosion, 1);
 
             gameObject.SetActive(false);
+            return true;
         }
+
+        return false;
     }
 }

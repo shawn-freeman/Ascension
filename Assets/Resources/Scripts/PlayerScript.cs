@@ -26,7 +26,8 @@ public class PlayerScript : ExtendedMonoBehavior, IDamagable
 	{
         CurrentWeapon = new Weapon();
         CurrentWeapon.Init(this.gameObject, 
-                            new List<Vector3>() { new Vector3(0.2f, 0, 0.1f), new Vector3(-0.2f, 0, 0.1f) }
+                            new List<Vector3>() { Vector3.zero }
+                            //new List<Vector3>() { new Vector3(0.2f, 0, 0.1f), new Vector3(-0.2f, 0, 0.1f) } //two blasters
                             );
 	}
 	
@@ -75,7 +76,7 @@ public class PlayerScript : ExtendedMonoBehavior, IDamagable
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Player Trigger Enter " + collision.gameObject.name + " Health: " + health);
+        //Debug.Log("Player Trigger Enter " + collision.gameObject.name + " Health: " + health);
 
         if (collision.gameObject.tag.Contains("Enemy"))
         {
@@ -83,10 +84,15 @@ public class PlayerScript : ExtendedMonoBehavior, IDamagable
         }
     }
 
-    public void OnDamage(float damage)
+    public bool OnDamage(float damage)
     {
         health -= damage;
 
-        if (health <= 0) { SceneManager.LoadScene(Scenes.MAIN_MENU); }
+        if (health <= 0) {
+            SceneManager.LoadScene(Scenes.MAIN_MENU);
+            return true;
+        }
+
+        return false;
     }
 }

@@ -9,20 +9,20 @@ using System.Linq;
 using Assets.Resources;
 using Assets.Resources.Scripts.Interfaces;
 
-public class BulletScript : ExtendedMonoBehavior
+public class BulletScript : ExtendedMonoBehavior, IModdable
 {
 	
 	public float moveSpeed = 0.5f;		//how fast the bullet moves
 	public float timeSpentAlive;        //how long the bullet has existed
     public GameObject objOwner;
-
     public GameObject HitEffect;
 
+    public bool IsChild = false;
     public bool IsImmortal;
     public float MaxLifeTime = 3;
     public float Damage = 5;
 
-    public List<WeaponMod> Mods;
+    public List<WeaponMod> Mods { get; set; }
 
     public float nullTime;
     
@@ -52,15 +52,17 @@ public class BulletScript : ExtendedMonoBehavior
         
 	}
 	
-	public void Init(GameObject owner, int animation, bool isChild = false)
+	public virtual void Init(GameObject owner, int animation, bool isChild = false)
 	{
 		objOwner = owner;
         transform.rotation = objOwner.transform.rotation;
         //AudioSource.PlayClipAtPoint(LoadedAssets.SFX_LASER, Camera.main.transform.position);
         timeSpentAlive = 0;
+        IsChild = isChild;
         nullTime = isChild ? 0.025f : 0.0f;
+        transform.localScale = Vector3.one;
 
-        PreviouslyCollided = new List<GameObject>();
+        
         IsImmortal = false;
         gameObject.SetActive (true);
         Mods = new List<WeaponMod>();
@@ -74,12 +76,13 @@ public class BulletScript : ExtendedMonoBehavior
         //if(hitEffect != null) Destroy(hitEffect.gameObject, hitEffect.duration);
         objOwner = null;
         Mods = null;
+        PreviouslyCollided = new List<GameObject>();
         _animator.SetInteger(AnimationHashes.PROJECTILE_ANIMATION_ID, -1);
         gameObject.SetActive (false);
     }
 	
 	// Update is called once per frame
-	public void Update () 
+	public virtual void Update () 
 	{
         
         timeSpentAlive += Time.deltaTime;
@@ -94,18 +97,7 @@ public class BulletScript : ExtendedMonoBehavior
         _rigidbody.MovePosition(moveVector);
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.GetComponent<PlayerScript>())
-        {
-
-        }else
-        {
-
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void OnTriggerEnter2D(Collider2D collision)
     {
         bool performOnHit = false;
 
@@ -115,7 +107,7 @@ public class BulletScript : ExtendedMonoBehavior
 
         if (damagable == null || damagable == objOwner.GetComponent<IDamagable>()) return;
 
-        performOnHit = RunMods(collision);
+        performOnHit = OnHitMods(collision);
 
         if (performOnHit)
         {
@@ -124,13 +116,18 @@ public class BulletScript : ExtendedMonoBehavior
             effect.transform.rotation = transform.rotation;
             effect.Init(EFFECTS.BlueHit, 1);
 
-            damagable.OnDamage(Damage);
+            var isDestroyed =  damagable.OnDamage(Damage);
+
+            if (isDestroyed)
+            {
+                PreviouslyCollided.Remove(collision.gameObject);
+            }
         }
-            
-        if(!IsImmortal) gameObject.SetActive(false);
+
+        if (!IsImmortal) gameObject.SetActive(false);
     }
 
-    private bool RunMods(Collider2D collision)
+    public bool OnHitMods(Collider2D collision)
     {
         var boolVals = new List<bool>();
         foreach (var mod in Mods)

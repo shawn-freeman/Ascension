@@ -7,6 +7,6 @@ namespace Assets.Resources.Scripts.Interfaces
 {
     public interface IDamagable
     {
-        void OnDamage(float damage);
+        bool OnDamage(float damage);
     }
 }

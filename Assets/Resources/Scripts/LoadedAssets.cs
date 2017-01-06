@@ -13,6 +13,7 @@ public class LoadedAssets : MonoBehaviour {
 
     public static GameObject BLUE_PLASMA;
     public static GameObject PROJECTILE_PREFAB;
+    public static GameObject PERIODIC_AOE_PREFAB;
 
     #endregion
 
@@ -40,6 +41,7 @@ public class LoadedAssets : MonoBehaviour {
 
         BLUE_PLASMA = (GameObject)Resources.Load("Prefabs/BluePlasma", typeof(GameObject));
         PROJECTILE_PREFAB = (GameObject)Resources.Load("Prefabs/ProjectilePrefab", typeof(GameObject));
+        PERIODIC_AOE_PREFAB = (GameObject)Resources.Load("Prefabs/PeriodAoePrefab", typeof(GameObject));
 
         Debug.Log("Loaded Assets!");
     }

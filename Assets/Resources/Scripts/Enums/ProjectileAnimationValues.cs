@@ -8,6 +8,7 @@ namespace Assets.Resources.Scripts.Enums
     public enum ProjectileAnimationValues
     {
         GatlingLaser,
-        BluePlasma
+        BluePlasma,
+        EnergyOrb
     }
 }
