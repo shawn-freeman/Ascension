@@ -30,7 +30,7 @@ public class EffectsScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        
+        transform.position += (Vector3.up * (BackgroundManager._Instance.ParallaxBaseSpeed * -1)) * Time.deltaTime;
 	}
 
     public void OnAnimationComplete()
