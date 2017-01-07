@@ -6,6 +6,7 @@ using Assets.Resources.Scripts.Pocos;
 using System.Collections.Generic;
 using Assets.Resources.Scripts.Interfaces;
 using Assets.Resources;
+using Assets.Resources.Scripts.Enums;
 
 public class PlayerScript : ExtendedMonoBehavior, IDamagable
 {	
@@ -74,7 +75,7 @@ public class PlayerScript : ExtendedMonoBehavior, IDamagable
         //_rigidBody.MovePosition(transform.position + moveVector);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         //Debug.Log("Player Trigger Enter " + collision.gameObject.name + " Health: " + health);
 
@@ -87,6 +88,11 @@ public class PlayerScript : ExtendedMonoBehavior, IDamagable
     public bool OnDamage(float damage)
     {
         health -= damage;
+
+        EffectsScript effect = PoolManager.GetObject(LoadedAssets.EFFECTS_PREFAB).GetComponent<EffectsScript>();
+        effect.transform.position = transform.position;
+        effect.transform.rotation = transform.rotation;
+        effect.Init(EFFECTS.BlueHit, 1);
 
         if (health <= 0) {
             SceneManager.LoadScene(Scenes.MAIN_MENU);
