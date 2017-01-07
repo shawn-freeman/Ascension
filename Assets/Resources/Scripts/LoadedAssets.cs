@@ -41,7 +41,7 @@ public class LoadedAssets : MonoBehaviour {
 
         BLUE_PLASMA = (GameObject)Resources.Load("Prefabs/BluePlasma", typeof(GameObject));
         PROJECTILE_PREFAB = (GameObject)Resources.Load("Prefabs/ProjectilePrefab", typeof(GameObject));
-        PERIODIC_AOE_PREFAB = (GameObject)Resources.Load("Prefabs/PeriodAoePrefab", typeof(GameObject));
+        PERIODIC_AOE_PREFAB = (GameObject)Resources.Load("Prefabs/PeriodicAoePrefab", typeof(GameObject));
 
         Debug.Log("Loaded Assets!");
     }
