@@ -22,7 +22,7 @@ namespace Assets.Resources.Scripts.Abstract
                 Debug.Log(string.Format("hasNotCollided: ", enemy.name));
                 projectile.PreviouslyCollided.Add(enemy.gameObject);
 
-                BulletScript bullet = PoolManager.GetObject(LoadedAssets.PERIODIC_AOE_PREFAB).GetComponent<BulletScript>();
+                BulletScript bullet = PoolManager.GetObject(projectile.Prefab).GetComponent<BulletScript>();
                 bullet.Init(projectile.objOwner, projectile.CurrentAnimationValue, true);
                 bullet.transform.position = projectile.transform.position;
                 bullet.transform.rotation = projectile.transform.rotation;
@@ -34,7 +34,7 @@ namespace Assets.Resources.Scripts.Abstract
                 }
                 //base.OnCreate(bullet);
 
-                bullet = PoolManager.GetObject(LoadedAssets.PERIODIC_AOE_PREFAB).GetComponent<BulletScript>();
+                bullet = PoolManager.GetObject(projectile.Prefab).GetComponent<BulletScript>();
                 bullet.Init(projectile.objOwner, projectile.CurrentAnimationValue, true);
                 bullet.transform.position = projectile.transform.position;
                 bullet.transform.rotation = projectile.transform.rotation;

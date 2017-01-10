@@ -10,8 +10,7 @@ public class LoadedAssets : MonoBehaviour {
 	public static GameObject PREFAB_BULLET;
     public static GameObject ALIENTIER1_SHIP_1;
     public static GameObject FORMATION_DIAMOND;
-
-    public static GameObject BLUE_PLASMA;
+    
     public static GameObject PROJECTILE_PREFAB;
     public static GameObject PERIODIC_AOE_PREFAB;
 
@@ -38,8 +37,7 @@ public class LoadedAssets : MonoBehaviour {
         FORMATION_DIAMOND = (GameObject)Resources.Load("Prefabs/Formation_Diamond", typeof(GameObject));
 
         EFFECTS_PREFAB = (GameObject)Resources.Load("Prefabs/EffectsPrefab", typeof(GameObject));
-
-        BLUE_PLASMA = (GameObject)Resources.Load("Prefabs/BluePlasma", typeof(GameObject));
+        
         PROJECTILE_PREFAB = (GameObject)Resources.Load("Prefabs/ProjectilePrefab", typeof(GameObject));
         PERIODIC_AOE_PREFAB = (GameObject)Resources.Load("Prefabs/PeriodicAoePrefab", typeof(GameObject));
 

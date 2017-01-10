@@ -8,6 +8,8 @@ namespace Assets.Resources
 {
     public class ExtendedMonoBehavior : MonoBehaviour
     {
+        public GameObject Prefab;
+
         //Defined in the common base class for all mono behaviours
         public I GetInterfaceComponent<I>() where I : class
         {
