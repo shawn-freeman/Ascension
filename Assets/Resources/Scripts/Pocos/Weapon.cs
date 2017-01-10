@@ -10,28 +10,31 @@ namespace Assets.Resources.Scripts.Pocos
 {
     public class Weapon
     {
+        public int ID;
         public GameObject Owner;
         public List<Vector3> ProjectilePositions;
         public List<WeaponMod> WeaponMods;
 
-        public GameObject ProjectilePrefab;
-
-        private float AttackRate = 1.0f;
+        public float AttackRate = 1.0f;
         public float LastAttack = 0.0f;
         public float Damage;
 
-        public void Init(GameObject owner, List<Vector3> positions)
+        //TODO: Replace these with an object
+        public GameObject ProjectilePrefab;
+        public int AnimationValue;
+
+        public void Init(GameObject owner, GameObject prefab, List<Vector3> positions)
         {
             this.Owner = owner;
             ProjectilePositions = positions;
 
             WeaponMods = new List<WeaponMod>() {
                 new ForkMod(),
-                //new PierceMod(),
+                new PierceMod(),
                 new IncreaseAoeMod(2.0f)
             };
 
-            ProjectilePrefab = LoadedAssets.BLUE_PLASMA;
+            ProjectilePrefab = prefab;
         }
 
         public void Attack()
@@ -40,10 +43,11 @@ namespace Assets.Resources.Scripts.Pocos
             
             foreach (var position in ProjectilePositions)
             {
-                BulletScript bullet = PoolManager.GetObject(LoadedAssets.PERIODIC_AOE_PREFAB).GetComponent<BulletScript>();
+                BulletScript bullet = PoolManager.GetObject(ProjectilePrefab).GetComponent<BulletScript>();
                 bullet.transform.position = Owner.transform.position + position;
                 bullet.transform.rotation = Owner.transform.rotation;
-                bullet.Init(Owner.gameObject, (int)ProjectileAnimationValues.EnergyOrb);
+                bullet.Prefab = ProjectilePrefab;
+                bullet.Init(Owner.gameObject, AnimationValue);
 
                 foreach (var mod in WeaponMods)
                 {

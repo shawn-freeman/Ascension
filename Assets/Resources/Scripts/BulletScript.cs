@@ -20,7 +20,7 @@ public class BulletScript : ExtendedMonoBehavior, IModdable
     public bool IsChild = false;
     public bool IsImmortal;
     public float MaxLifeTime = 3;
-    public float Damage = 5;
+    public float Damage;
 
     public List<WeaponMod> Mods { get; set; }
 
@@ -66,6 +66,7 @@ public class BulletScript : ExtendedMonoBehavior, IModdable
         IsImmortal = false;
         gameObject.SetActive (true);
         Mods = new List<WeaponMod>();
+        
         _animator.SetInteger(AnimationHashes.PROJECTILE_ANIMATION_ID, animation);
         _collider.size = ColliderPresets.FirstOrDefault(a => a.Id == animation).Size;
         _collider.offset = ColliderPresets.FirstOrDefault(a => a.Id == animation).Offset;
@@ -77,6 +78,7 @@ public class BulletScript : ExtendedMonoBehavior, IModdable
         objOwner = null;
         Mods = null;
         PreviouslyCollided = new List<GameObject>();
+        
         _animator.SetInteger(AnimationHashes.PROJECTILE_ANIMATION_ID, -1);
         gameObject.SetActive (false);
     }

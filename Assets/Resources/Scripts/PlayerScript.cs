@@ -27,10 +27,16 @@ public class PlayerScript : ExtendedMonoBehavior, IDamagable
 	{
         CurrentWeapon = new Weapon();
         CurrentWeapon.Init(this.gameObject, 
+                            LoadedAssets.PROJECTILE_PREFAB,
                             new List<Vector3>() { Vector3.zero }
                             //new List<Vector3>() { new Vector3(0.2f, 0, 0.1f), new Vector3(-0.2f, 0, 0.1f) } //two blasters
                             );
-	}
+        CurrentWeapon.AnimationValue = 1;
+        CurrentWeapon.AttackRate = 0.3f;
+
+        Controller._Instance.RegisterInput<Vector3>(PrevWeapon, KeyCode.Q);
+        Controller._Instance.RegisterInput<Vector3>(NextWeapon, KeyCode.E);
+    }
 	
 	// Update is called once per frame
 	void Update () 
@@ -61,24 +67,15 @@ public class PlayerScript : ExtendedMonoBehavior, IDamagable
 			v.y = Mathf.Clamp(v.y, bottomBorder.y, topBorder.y);
 			transform.position = v;
 		}
-		
-		if(Input.GetMouseButton(0)) 
-		{
+
+        if (Input.GetMouseButton(0))
+        {
             CurrentWeapon.Attack();
-		}
-	}
-
-    private void FixedUpdate()
-    {
-        //Vector3 moveVector = Controller.inputMovement * SPEED * Time.deltaTime;
-
-        //_rigidBody.MovePosition(transform.position + moveVector);
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        //Debug.Log("Player Trigger Enter " + collision.gameObject.name + " Health: " + health);
-
         if (collision.gameObject.tag.Contains("Enemy"))
         {
             OnDamage(1);
@@ -100,5 +97,26 @@ public class PlayerScript : ExtendedMonoBehavior, IDamagable
         }
 
         return false;
+    }
+
+    public void PrevWeapon(Vector3 input)
+    {
+        CurrentWeapon = new Weapon();
+        CurrentWeapon.Init(this.gameObject,
+                            LoadedAssets.PERIODIC_AOE_PREFAB,
+                            new List<Vector3>() { Vector3.zero }
+                            );
+        CurrentWeapon.AnimationValue = 2;
+    }
+
+    public void NextWeapon(Vector3 input)
+    {
+        CurrentWeapon = new Weapon();
+        CurrentWeapon.Init(this.gameObject,
+                            LoadedAssets.PROJECTILE_PREFAB,
+                            new List<Vector3>() { Vector3.zero }
+                            );
+        CurrentWeapon.AnimationValue = 1;
+        CurrentWeapon.AttackRate = 0.3f;
     }
 }
