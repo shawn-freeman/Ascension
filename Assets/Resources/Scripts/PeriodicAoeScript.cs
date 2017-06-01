@@ -33,8 +33,14 @@ namespace Assets.Resources.Scripts
             var sprite = GetComponent<SpriteRenderer>();
             base.Update();
 
-            if (_collider.enabled) { StartCoroutine(Deactivate()); } 
-            else { StartCoroutine(Activate()); }
+            if (gameObject.activeInHierarchy)
+            {
+                if (_collider.enabled)
+                {
+                    StartCoroutine(Deactivate());
+                }
+                else { StartCoroutine(Activate()); }
+            }
         }
 
         public void OnTriggerStay2D(Collider2D collision)
