@@ -9,5 +9,6 @@ namespace Assets.Scripts.Constants
     {
         public static int MAIN_MENU = 0;
         public static int GAME = 1;
+        public static int GAME_SETUP = 2;
     }
 }
