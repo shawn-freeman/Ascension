@@ -22,6 +22,11 @@ public class LoadedAssets : MonoBehaviour {
 
     #endregion
 
+    #region Upgrades
+    public static GameObject UPGRADE_LISTING_PREFAB;
+    public static GameObject UPGRADE_DRAGDROP_PREFAB;
+    #endregion
+
     #region Sound Effects
 
     public static AudioClip 			SFX_LASER;
@@ -40,6 +45,9 @@ public class LoadedAssets : MonoBehaviour {
         
         PROJECTILE_PREFAB = (GameObject)Resources.Load("Prefabs/ProjectilePrefab", typeof(GameObject));
         PERIODIC_AOE_PREFAB = (GameObject)Resources.Load("Prefabs/PeriodicAoePrefab", typeof(GameObject));
+
+        UPGRADE_LISTING_PREFAB = (GameObject)Resources.Load("Prefabs/UpgradeListItem", typeof(GameObject));
+        UPGRADE_DRAGDROP_PREFAB = (GameObject)Resources.Load("Prefabs/UpgradeDragDropPrefab", typeof(GameObject));
 
         Debug.Log("Loaded Assets!");
     }
