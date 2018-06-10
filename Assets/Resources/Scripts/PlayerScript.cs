@@ -41,8 +41,23 @@ public class PlayerScript : ExtendedMonoBehavior, IDamagable
 	// Update is called once per frame
 	void Update () 
 	{
-        Vector3 moveVector = Controller.inputMovement * SPEED * Time.deltaTime;
-        transform.position += moveVector;
+        //Vector3 moveVector = Controller.inputMovement * SPEED * Time.deltaTime;
+
+        //transform.position += moveVector;
+
+        if (Input.GetMouseButton(0))
+        {
+            var heading = Camera.main.ScreenToWorldPoint(Controller.mousePosition) - gameObject.transform.position;
+            var dist = heading.magnitude > SPEED ? SPEED : heading.magnitude;
+            var direction = heading / dist;
+
+            //Vector3 mousePos = Camera.main.ScreenToWorldPoint(Controller.mousePosition);
+            direction.z = 0;
+            var accelerate = (direction / 10).normalized;
+
+            transform.position += direction;
+            CurrentWeapon.Attack();
+        }
 
         //get the distance on the Z axis from the main cmaera to the player
         float distCamToPlayer = Mathf.Abs(Camera.main.transform.position.z - transform.position.z);
@@ -68,10 +83,7 @@ public class PlayerScript : ExtendedMonoBehavior, IDamagable
 			transform.position = v;
 		}
 
-        if (Input.GetMouseButton(0))
-        {
-            CurrentWeapon.Attack();
-        }
+        
     }
 
     private void OnTriggerStay2D(Collider2D collision)
